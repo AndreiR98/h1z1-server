@@ -12,7 +12,10 @@
 // ======================================================================
 
 const PackageSetting = require("./package.json");
-
+const blocked = require('blocked-at')
+blocked((time, stack) => {
+  console.log(`Blocked for ${time}ms, operation started here:`, stack)
+})
 console.log(
   `${PackageSetting.name} V${PackageSetting.version} by H1emu community`
 );
