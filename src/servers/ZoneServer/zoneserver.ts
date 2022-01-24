@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { GatewayServer } from "../GatewayServer/gatewayserver";
-import { H1Z1Protocol as ZoneProtocol } from "../../protocols/h1z1protocol";
+import { H1Z1Protocol as ZoneProtocol, UpdatePositionObject } from "../../protocols/h1z1protocol";
 import { H1emuZoneServer } from "../H1emuServer/h1emuZoneServer";
 import { H1emuClient } from "../H1emuServer/shared/h1emuclient";
 import {
@@ -934,7 +934,7 @@ export class ZoneServer extends EventEmitter {
         ) &&
         !client.spawnedEntities.includes(this._npcs[npc])
       ) {
-        client.npcsToSpawn.push({ ...this._npcs[npc], profileId: 65 });
+        this.sendData(client, "PlayerUpdate.AddLightweightNpc", { ...this._npcs[npc], profileId: 65, positionUpdateType: 1 });
         client.spawnedEntities.push(this._npcs[npc]);
       }
     }
@@ -977,6 +977,28 @@ export class ZoneServer extends EventEmitter {
       const clientObj: Client = this._clients[client];
       if (!clientObj.isLoading) {
         callback(clientObj);
+      }
+    }
+  }
+
+  testPathFinding(client: Client){
+    for (const npc in this._npcs) {
+      if (
+        isPosInRadius(
+          this._npcRenderDistance,
+          client.character.state.position,
+          this._npcs[npc].position
+        ) &&
+        client.spawnedEntities.includes(this._npcs[npc])
+      ) {
+        const newPos = this._npcs[npc].position
+        newPos[0] += 0.5;
+        const positionUpdate =  this.createPositionUpdate(newPos)
+        this.sendDataToAll("PlayerUpdate.UpdatePosition", {
+          transientId: this._npcs[npc].transientId,
+          positionUpdate: positionUpdate,
+        });
+        this._npcs[npc].position = newPos;
       }
     }
   }
@@ -2596,15 +2618,15 @@ export class ZoneServer extends EventEmitter {
   }
 
   createPositionUpdate(position: Float32Array, rotation?: any): any {
-    const obj: any = {
-      flags: 4095,
-      unknown2_int32: this.getGameTime(),
-      unknown3_int8: 0,
-      unknown4: 1,
+    const obj: UpdatePositionObject = {
+      flags: 510,
+      sequenceTime: this.getGameTime(),
+      unknown3_int8:0,
       position: position,
+      horizontalSpeed: 1,
     };
     if (rotation) {
-      obj.unknown13_float = rotation;
+      obj.rotation = rotation;
     }
     return obj;
   }
