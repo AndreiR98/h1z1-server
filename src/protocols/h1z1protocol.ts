@@ -17,24 +17,24 @@ import { packUnsignedIntWith2bitLengthValue } from "../packets/ClientProtocol/Cl
 import { eul2quat, getPacketTypeBytes, lz4_decompress } from "../utils/utils";
 
 export interface UpdatePositionObject {
-  raw: Buffer;
+  raw?: Buffer;
   flags: any;
   sequenceTime: any; // similar to simestamp, allows us to delay/synchronize this packet
-  unknown3_int8: any;
-  stance: any; // crouch, stand, and more
-  position: any;
-  orientation: any; // For PC i believe its related to torso rotation, usefull for rotating all objects like doors
-  frontTilt: any;
-  sideTilt: any;
-  angleChange: any; // sometimes send by PC, but mostly by vehicles
-  verticalSpeed: any;
-  horizontalSpeed: any;
-  unknown12_float: any;
-  rotationRaw: any;
-  lookAt: any;
-  rotation: any;
-  direction: any; // send when pressing of the WSAD keys to provide direction for movement
-  engineRPM: any;
+  unknown3_int8?: any;
+  stance?: any; // crouch, stand, and more
+  position?: any;
+  orientation?: any; // For PC i believe its related to torso rotation, usefull for rotating all objects like doors
+  frontTilt?: any;
+  sideTilt?: any;
+  angleChange?: any; // sometimes send by PC, but mostly by vehicles
+  verticalSpeed?: any;
+  horizontalSpeed?: any;
+  unknown12_float?: any;
+  rotationRaw?: any;
+  lookAt?: any;
+  rotation?: any;
+  direction?: any; // send when pressing of the WSAD keys to provide direction for movement
+  engineRPM?: any;
 }
 
 interface PositionZoneToClient {
