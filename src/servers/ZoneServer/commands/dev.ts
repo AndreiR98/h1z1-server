@@ -59,22 +59,24 @@ const dev: any = {
       rotation: client.character.state.lookAt,
       attachedObject: {},
       color: {},
+      positionUpdateType: 1,
       array5: [{ unknown1: 0 }],
       array17: [{ unknown1: 0 }],
       array18: [{ unknown1: 0 }],
     };
     npc.onReadyCallback = () => {
-      server.sendData(client, "PlayerUpdate.SetSpotted", {
-        unkArray: [{ guid: client.character.characterId }],
-      });
-      server.sendData(client, "PlayerUpdate.AggroLevel", {
-        characterId: characterId,
-        aggroLevel: 1000,
-      });
-      /* server.sendData(client, "PlayerUpdate.SeekTarget", {
-              characterId: characterId,
-              TargetCharacterId: client.character.characterId,
-            });*/
+      setInterval(()=>{
+        const thisNpc = server._npcs[characterId];
+        const newPos = thisNpc.position
+        newPos[0] += 1;
+        const positionUpdate =  server.createPositionUpdate(newPos)
+        server.sendDataToAll("PlayerUpdate.UpdatePosition", {
+          transientId: thisNpc.transientId,
+          positionUpdate: positionUpdate,
+        });
+        console.log("send posupdt ",newPos)
+        server._npcs[characterId].position = newPos;
+      },1000)
     };
     server.sendDataToAll("PlayerUpdate.AddLightweightNpc", npc);
     server.sendData(client, "ResourceEvent", {
