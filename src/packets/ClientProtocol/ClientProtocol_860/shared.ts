@@ -17,6 +17,7 @@ import {
   lz4_decompress,
 } from "../../../utils/utils";
 import DataSchema from "h1z1-dataschema";
+import { UpdatePositionObject } from "protocols/h1z1protocol";
 
 export function readPacketType(data: Buffer, packets: any) {
   let opCode = data[0] >>> 0,
@@ -252,7 +253,7 @@ export function readPositionUpdateData(data: Buffer, offset: number) {
   };
 }
 
-export function packPositionUpdateData(obj: any) {
+export function packPositionUpdateData(obj: UpdatePositionObject) {
   let data = Buffer.allocUnsafe(7),
     flags = 0,
     v;
@@ -260,13 +261,13 @@ export function packPositionUpdateData(obj: any) {
   data.writeUInt32LE(obj["sequenceTime"], 2);
   data.writeUInt8(obj["unknown3_int8"], 6);
 
-  if ("stance" in obj) {
+  if (obj.stance !== undefined) {
     flags |= 1;
     v = packUnsignedIntWith2bitLengthValue(obj["stance"]);
     data = Buffer.concat([data, v]);
   }
 
-  if ("position" in obj) {
+  if (obj.position !== undefined) {
     flags |= 2;
     v = packSignedIntWith2bitLengthValue(obj["position"][0] * 100);
     data = Buffer.concat([data, v]);
@@ -276,44 +277,44 @@ export function packPositionUpdateData(obj: any) {
     data = Buffer.concat([data, v]);
   }
 
-  if ("orientation" in obj) {
+  if (obj.orientation !== undefined) {
     flags |= 0x20;
     v = Buffer.allocUnsafe(4);
     v.writeFloatLE(obj["orientation"], 0);
     data = Buffer.concat([data, v]);
   }
 
-  if ("frontTilt" in obj) {
+  if (obj.frontTilt !== undefined) {
     flags |= 0x40;
     v = packSignedIntWith2bitLengthValue(obj["frontTilt"] * 100);
     data = Buffer.concat([data, v]);
   }
 
-  if ("sideTilt" in obj) {
+  if (obj.sideTilt !== undefined) {
     flags |= 0x80;
     v = packSignedIntWith2bitLengthValue(obj["sideTilt"] * 100);
     data = Buffer.concat([data, v]);
   }
 
-  if ("angleChange" in obj) {
+  if (obj.angleChange !== undefined) {
     flags |= 4;
     v = packSignedIntWith2bitLengthValue(obj["angleChange"] * 100);
     data = Buffer.concat([data, v]);
   }
 
-  if ("verticalSpeed" in obj) {
+  if (obj.verticalSpeed !== undefined) {
     flags |= 8;
     v = packSignedIntWith2bitLengthValue(obj["verticalSpeed"] * 100);
     data = Buffer.concat([data, v]);
   }
 
-  if ("horizontalSpeed" in obj) {
+  if (obj.horizontalSpeed !== undefined) {
     flags |= 0x10;
     v = packSignedIntWith2bitLengthValue(obj["horizontalSpeed"] * 10);
     data = Buffer.concat([data, v]);
   }
 
-  if ("unknown12_float" in obj) {
+  if (obj.unknown12_float !== undefined) {
     flags |= 0x100;
     v = packSignedIntWith2bitLengthValue(obj["unknown12_float"][0] * 100);
     data = Buffer.concat([data, v]);
@@ -323,7 +324,7 @@ export function packPositionUpdateData(obj: any) {
     data = Buffer.concat([data, v]);
   }
 
-  if ("rotationRaw" in obj) {
+  if (obj.rotationRaw !== undefined) {
     flags |= 0x200;
     v = packSignedIntWith2bitLengthValue(obj["rotationRaw"][0] * 100);
     data = Buffer.concat([data, v]);
@@ -335,13 +336,13 @@ export function packPositionUpdateData(obj: any) {
     data = Buffer.concat([data, v]);
   }
 
-  if ("direction" in obj) {
+  if (obj.direction !== undefined) {
     flags |= 0x400;
     v = packSignedIntWith2bitLengthValue(obj["direction"] * 10);
     data = Buffer.concat([data, v]);
   }
 
-  if ("engineRPM" in obj) {
+  if (obj.engineRPM !== undefined) {
     flags |= 0x800;
     v = packSignedIntWith2bitLengthValue(obj["engineRPM"] * 10);
     data = Buffer.concat([data, v]);
