@@ -129,6 +129,7 @@ const packets = [
           dataLength;
         const subPackets = [];
         while (offset < data.length - 2) {
+          console.log("while (offset < data.length - 2)")
           dataLength = readDataLength(data, offset);
           offset += dataLength.numBytes;
           subPackets.push(
@@ -412,6 +413,7 @@ const packets = [
           dataLength;
         const subPackets = [];
         while (offset < data.length - 2) {
+          console.log("while (offset < data.length - 2) multiAppPacjet")
           dataLength = readDataLength(data, offset);
           offset += dataLength.numBytes;
           subPackets.push(

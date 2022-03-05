@@ -215,6 +215,8 @@ function parseChannelPacketData(data: Buffer): any {
   if (data[0] === 0x00 && data[1] === 0x19) {
     offset = 2;
     while (offset < data.length) {
+      console.log(" while (offset < data.length) { parseChannelPacketData")
+
       dataLength = readDataLength(data, offset);
       offset += dataLength.numBytes;
       appData.push(data.slice(offset, offset + dataLength.value));

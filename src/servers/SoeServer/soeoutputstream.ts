@@ -74,6 +74,7 @@ export class SOEOutputStream extends EventEmitter {
 
   ack(sequence: number): void {
     while (this._lastAck <= sequence) {
+      console.log("while (this._lastAck <= sequence)")
       if (this._enableCaching && !!this._cache[this._lastAck]) {
         delete this._cache[this._lastAck];
       }
