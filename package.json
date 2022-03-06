@@ -19,6 +19,7 @@
     "debug": "4.3.3",
     "h1emu-core": "0.7.0",
     "h1z1-dataschema": "1.5.9",
+    "inspector-api": "^1.4.3",
     "mongodb": "4.4.0",
     "mongodb-restore-dump": "1.0.1",
     "typedoc": "0.22.12",

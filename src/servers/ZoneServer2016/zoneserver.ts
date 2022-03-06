@@ -23,7 +23,7 @@ import { loadoutContainer, Weather2016 } from "../../types/zoneserver";
 import { h1z1PacketsType } from "../../types/packets";
 import { Character2016 as Character } from "./classes/character";
 import { H1Z1Protocol } from "../../protocols/h1z1protocol";
-import { _, initMongo, Int64String, isPosInRadius } from "../../utils/utils";
+import { _, initMongo, Int64String, isPosInRadius, Scheduler } from "../../utils/utils";
 
 import { Db, MongoClient } from "mongodb";
 import dynamicWeather from "./workers/dynamicWeather";
@@ -2345,3 +2345,25 @@ if (process.env.VSCODE_DEBUG === "true") {
     2
   ).start();
 }
+
+setInterval(async ()=>{
+  const Inspector = require('inspector-api')
+  const inspector = new Inspector({
+    storage: {
+        type: 'fs',
+        bucket: 'testBucket',
+        dir: 'inspector'
+    }
+})
+  
+  await inspector.profiler.enable()
+  await inspector.profiler.start()
+  // Invoke business logic under measurement here...
+  await Scheduler.wait(300000);
+  // some time later...
+  await inspector.profiler.stop()
+
+  console.log("inspector done")
+
+
+},600000)
