@@ -244,7 +244,6 @@ export const lz4_decompress = function (
     offsetOut = 0;
 
   while (1) {
-    console.log(" while (1) ")
     const token: any = data[offsetIn];
     let literalLength: any = token >> 4;
     let matchLength: any = token & 0xf;
@@ -252,7 +251,6 @@ export const lz4_decompress = function (
     if (literalLength) {
       if (literalLength == 0xf) {
         while (data[offsetIn] == 0xff) {
-          console.log(" while (data[offsetIn] == 0xff) { ")
           literalLength += 0xff;
           offsetIn++;
         }
@@ -271,7 +269,6 @@ export const lz4_decompress = function (
 
       if (matchLength == 0xf) {
         while (data[offsetIn] == 0xff) {
-          console.log(" while (data[offsetIn] == 0xff) ")
           matchLength += 0xff;
           offsetIn++;
         }
@@ -310,7 +307,6 @@ export const initMongo = async function (
 export const getPacketTypeBytes = function (packetType: number): number[] {
   const packetTypeBytes = [];
   while (packetType) {
-    console.log("while (packetType)")
     packetTypeBytes.unshift(packetType & 0xff);
     packetType = packetType >> 8;
   }
